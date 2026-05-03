@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exhibitionist Lunch Club 🍜</title>
+  <style>
+    :root {
+      --primary: #e8532a;
+      --primary-dark: #c43f1a;
+      --primary-light: #fff0eb;
+      --dark: #1a1a2e;
+      --bg: #12161f;
+      --card: #ffffff;
+      --border: #e2e5ea;
+      --text: #1a1a2e;
+      --muted: #7a8494;
+      --green: #2dba4e;
+      --red: #e53e3e;
+      --gold: #f6c90e;
+      --gold-empty: #dde1e8;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.14);
+      --radius: 10px;
+      --header-h: 62px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      height: var(--header-h);
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 14px;
+      flex-shrink: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #fff;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-icon { font-size: 26px; line-height: 1; }
+    .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 400; display: block; margin-top: -3px; }
+
+    .header-spacer { flex: 1; }
+
+    .username-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 0 12px;
+      height: 36px;
+    }
+    .username-wrap label { font-size: 12px; color: rgba(255,255,255,0.5); white-space: nowrap; }
+    #username {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 13px;
+      width: 110px;
+    }
+    #username::placeholder { color: rgba(255,255,255,0.3); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 14px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(232,83,42,0.4); }
+    .btn-danger { background: var(--red); color: #fff; font-size: 12px; padding: 0 10px; height: 28px; border-radius: 6px; }
+    .btn-danger:hover { background: #c53030; }
+    .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; border-radius: 6px; }
+
+    /* ── Main layout ── */
+    main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Left panel ── */
+    #left-panel {
+      width: 400px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .list-toolbar {
+      padding: 12px 14px;
+      display: flex;
+      gap: 8px;
+      background: #1a1f2e;
+      border-bottom: 1px solid #2a3245;
+      flex-shrink: 0;
+    }
+
+    #search {
+      flex: 1;
+      border: 1px solid #2a3245;
+      border-radius: 8px;
+      padding: 0 12px;
+      height: 34px;
+      font-size: 13px;
+      outline: none;
+      background: #12161f;
+      color: #e8eaf2;
+      transition: border-color 0.15s;
+    }
+    #search::placeholder { color: #4a5568; }
+    #search:focus { border-color: var(--primary); background: #1e2330; }
+
+    #sort-select {
+      border: 1px solid #2a3245;
+      border-radius: 8px;
+      padding: 0 10px;
+      height: 34px;
+      font-size: 12px;
+      outline: none;
+      background: #12161f;
+      color: #e8eaf2;
+      cursor: pointer;
+    }
+
+    #restaurant-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* ── Restaurant card — dark mode ── */
+    .card {
+      background: #1e2330;
+      border-radius: var(--radius);
+      border: 2px solid transparent;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      transition: all 0.18s;
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.45); transform: translateY(-1px); }
+    .card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(232,83,42,0.25), 0 6px 24px rgba(0,0,0,0.45); }
+
+    /* dark text overrides scoped to card */
+    .card .card-name  { color: #e8eaf2; }
+    .card .card-address { color: #8892a4; }
+    .card .avg-rating { color: #8892a4; }
+    .card .avg-rating strong { color: #e8eaf2; }
+    .card .delete-btn { color: #8892a4; }
+    .card .delete-btn:hover { background: rgba(229,62,62,0.15); color: #fc8181; }
+    .card .no-pin-badge { background: #252d3d; border-color: #2d3852; color: #8892a4; }
+
+    .card-main {
+      padding: 12px 14px 10px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 7px;
+    }
+
+    .card-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .card-info { flex: 1; min-width: 0; }
+    .card-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .card-address {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .cuisine-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--primary-light);
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .deal-box {
+      background: #1a2a1e;
+      border-left: 3px solid #3dba5e;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+    .deal-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #4ecb6e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .deal-desc {
+      font-size: 13.5px;
+      color: #a8d8b0;
+      line-height: 1.5;
+    }
+    .no-pin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-top: 4px;
+    }
+
+    /* ── Rating ── */
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+    .star {
+      font-size: 20px;
+      color: var(--gold-empty);
+      cursor: pointer;
+      transition: color 0.1s, transform 0.1s;
+      line-height: 1;
+      user-select: none;
+    }
+    .star.filled { color: var(--gold); }
+    .star.hover { color: #ffda00; transform: scale(1.15); }
+
+    .avg-rating {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .avg-rating strong { color: var(--text); font-weight: 700; }
+
+    /* ── Comments ── */
+    .card-footer {
+      border-top: 1px solid #2a3245;
+    }
+
+    .comments-toggle {
+      width: 100%;
+      padding: 8px 14px;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: 12.5px;
+      color: #8892a4;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .comments-toggle:hover { background: rgba(255,255,255,0.04); color: #c8cfe0; }
+    .comments-toggle .toggle-arrow { margin-left: auto; transition: transform 0.2s; font-style: normal; }
+    .comments-toggle.open .toggle-arrow { transform: rotate(180deg); }
+
+    .comments-body {
+      display: none;
+      padding: 0 14px 12px;
+      background: #171e2c;
+      border-top: 1px solid #2a3245;
+    }
+    .comments-body.open { display: block; }
+
+    .comment-list { margin-bottom: 10px; }
+    .comment {
+      padding: 8px 0;
+      border-bottom: 1px solid #2a3245;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .comment:last-child { border-bottom: none; }
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .comment-user { font-size: 12px; font-weight: 700; color: var(--primary); }
+    .comment-date { font-size: 11px; color: #8892a4; margin-left: auto; }
+    .comment-text { font-size: 13px; color: #c8cfe0; line-height: 1.4; }
+    .comment-delete {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      line-height: 1;
+      opacity: 0.5;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .comment-delete:hover { opacity: 1; color: var(--red); }
+
+    .no-comments { font-size: 12.5px; color: var(--muted); padding: 8px 0; font-style: italic; }
+
+    .add-comment {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .add-comment input {
+      flex: 1;
+      border: 1px solid #2a3245;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12.5px;
+      outline: none;
+      background: #1e2330;
+      color: #e8eaf2;
+      transition: border-color 0.15s;
+    }
+    .add-comment input::placeholder { color: #4a5568; }
+    .add-comment input:focus { border-color: var(--primary); }
+    .add-comment .btn-post {
+      height: 30px;
+      padding: 0 10px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .add-comment .btn-post:hover { background: var(--primary-dark); }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 14px 10px;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .delete-btn:hover { background: #fff0f0; color: var(--red); }
+
+    /* ── Map panel ── */
+    #right-panel {
+      flex: 1;
+      position: relative;
+      background: #e8eaed;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Map API key overlay */
+    #map-setup {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d3561 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    #map-setup.hidden { display: none; }
+
+    .map-setup-box {
+      background: #1e2330;
+      border-radius: 14px;
+      padding: 36px 40px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      text-align: center;
+      border: 1px solid #2a3245;
+    }
+    .map-setup-box .setup-icon { font-size: 48px; margin-bottom: 16px; }
+    .map-setup-box h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #e8eaf2; }
+    .map-setup-box p { font-size: 13.5px; color: #8892a4; line-height: 1.6; margin-bottom: 20px; }
+    .map-setup-box input {
+      width: 100%;
+      border: 1px solid #2a3245;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      outline: none;
+      margin-bottom: 12px;
+      color: #e8eaf2;
+      background: #12161f;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .map-setup-box input::placeholder { color: #4a5568; }
+    .map-setup-box input:focus { border-color: var(--primary); background: #1e2330; }
+    .map-setup-box .btn-primary { width: 100%; justify-content: center; height: 40px; font-size: 14px; }
+    .map-setup-box .setup-link { display: block; margin-top: 12px; font-size: 12px; color: var(--primary); text-decoration: none; }
+    .map-setup-box .setup-link:hover { text-decoration: underline; }
+    .map-error { color: var(--red); font-size: 12px; margin-top: 6px; display: none; }
+
+    /* ── Add Restaurant Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: #1e2330;
+      border-radius: 14px;
+      padding: 28px 30px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      transform: translateY(20px);
+      transition: transform 0.2s;
+      border: 1px solid #2a3245;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+    .modal-header h2 { font-size: 18px; font-weight: 700; flex: 1; color: #e8eaf2; }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #8892a4;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: #e8eaf2; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12.5px; font-weight: 600; color: #8892a4; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid #2a3245;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 13.5px;
+      outline: none;
+      color: #e8eaf2;
+      background: #12161f;
+      transition: border-color 0.15s, background 0.15s;
+      font-family: inherit;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #4a5568; }
+    .form-group select option { background: #1e2330; color: #e8eaf2; }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--primary); background: #1e2330; }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-group { flex: 1; }
+
+    .geocode-hint { font-size: 11.5px; color: #8892a4; margin-top: 4px; }
+    .geocode-hint.loading { color: var(--primary); }
+    .geocode-hint.success { color: var(--green); }
+    .geocode-hint.error { color: var(--red); }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+    .btn-cancel {
+      background: #252d3d;
+      color: #8892a4;
+      border: 1px solid #2a3245;
+    }
+    .btn-cancel:hover { background: #2d3852; color: #c8cfe0; }
+
+    /* ── Toast ── */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: var(--dark);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn 0.25s ease;
+      max-width: 320px;
+    }
+    .toast.success { background: #1a6b31; }
+    .toast.error { background: #8b1a1a; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Random picker overlay ── */
+    #random-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #random-overlay.active { display: flex; }
+
+    .random-box {
+      background: var(--dark);
+      border-radius: 16px;
+      padding: 40px 50px;
+      text-align: center;
+      color: #fff;
+      box-shadow: var(--shadow-lg);
+      max-width: 400px;
+      width: 90%;
+    }
+    .random-title { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+    .random-name { font-size: 26px; font-weight: 800; margin-bottom: 8px; min-height: 36px; color: var(--primary); }
+    .random-cuisine { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 24px; min-height: 20px; }
+    .random-deal { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 28px; min-height: 18px; font-style: italic; }
+    .random-actions { display: flex; gap: 10px; justify-content: center; }
+
+    /* ── Map info window ── */
+    .iw-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .iw-name { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .iw-cuisine { font-size: 11px; color: var(--primary); font-weight: 600; margin-bottom: 6px; }
+    .iw-address { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .iw-deal { font-size: 12px; color: #555; margin-bottom: 8px; font-style: italic; }
+    .iw-rating { font-size: 12px; color: var(--muted); }
+    .iw-rating strong { color: var(--text); }
+
+    /* Scrollbar styling */
+    #restaurant-list::-webkit-scrollbar { width: 5px; }
+    #restaurant-list::-webkit-scrollbar-track { background: transparent; }
+    #restaurant-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <span class="logo-icon">🍜</span>
+    <div>
+      <span class="logo-text">Exhibitionist Lunch Club</span>
+      <span class="logo-sub">Melbourne CBD</span>
+    </div>
+  </div>
+
+  <div class="header-spacer"></div>
+
+  <div class="username-wrap">
+    <label for="username">You:</label>
+    <input id="username" type="text" placeholder="Enter your name" maxlength="30" autocomplete="off">
+  </div>
+
+  <button class="btn btn-ghost" id="randomBtn">🎲 Pick Random</button>
+  <button class="btn btn-primary" id="addBtn">+ Add Restaurant</button>
+  <button class="btn btn-ghost" id="apiKeyBtn" title="Configure Google Maps API key" style="padding:0 10px;">🗺️</button>
+</header>
+
+<!-- Main -->
+<main>
+  <!-- Left: List -->
+  <div id="left-panel">
+    <div class="list-toolbar">
+      <input id="search" type="text" placeholder="Search restaurants…" autocomplete="off">
+      <select id="sort-select">
+        <option value="default">Sort: Default</option>
+        <option value="rating">Top Rated</option>
+        <option value="name">A–Z</option>
+        <option value="comments">Most Comments</option>
+      </select>
+    </div>
+    <div id="restaurant-list">
+      <div class="empty-state">
+        <div class="empty-icon">🔄</div>
+        <p>Loading restaurants…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Map -->
+  <div id="right-panel">
+    <div id="map"></div>
+    <div id="map-setup">
+      <div class="map-setup-box">
+        <div class="setup-icon">🗺️</div>
+        <h2>Connect Google Maps</h2>
+        <p>Enter your Google Maps JavaScript API key to show restaurants on an interactive map. The key is stored locally in your browser.</p>
+        <input id="apiKeyInput" type="text" placeholder="Paste your API key here…" autocomplete="off">
+        <div class="map-error" id="mapError"></div>
+        <button class="btn btn-primary" id="loadMapBtn">Load Map</button>
+        <a class="setup-link" href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopener">How to get a Google Maps API key →</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Add Restaurant Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Add Restaurant</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Restaurant Name *</label>
+      <input id="f-name" type="text" placeholder="e.g. Chin Chin" maxlength="100">
+    </div>
+    <div class="form-group">
+      <label>Address *</label>
+      <input id="f-address" type="text" placeholder="e.g. 125 Flinders Lane, Melbourne VIC 3000" maxlength="200">
+      <div class="geocode-hint" id="geocodeHint">Address will be automatically located on the map.</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Cuisine</label>
+        <select id="f-cuisine">
+          <option value="Other">Other</option>
+          <option value="Asian">Asian</option>
+          <option value="Chinese">Chinese</option>
+          <option value="European">European</option>
+          <option value="Greek">Greek</option>
+          <option value="Indian">Indian</option>
+          <option value="Italian">Italian</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Mexican">Mexican</option>
+          <option value="Middle Eastern">Middle Eastern</option>
+          <option value="Pub">Pub / Bar</option>
+          <option value="Thai">Thai</option>
+          <option value="Vietnamese">Vietnamese</option>
+          <option value="Cafe">Cafe</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Lunch Deal / Description</label>
+      <textarea id="f-deal" placeholder="e.g. $15 lunch special with a drink, Mon–Fri 12–3pm" maxlength="300"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveRestaurant()">Add Restaurant</button>
+    </div>
+  </div>
+</div>
+
+<!-- Random Picker Overlay -->
+<div id="random-overlay">
+  <div class="random-box">
+    <div class="random-title">Today's lunch is…</div>
+    <div class="random-name" id="random-name">🎲</div>
+    <div class="random-cuisine" id="random-cuisine"></div>
+    <div class="random-deal" id="random-deal"></div>
+    <div class="random-actions">
+      <button class="btn btn-ghost" onclick="closeRandom()">Close</button>
+      <button class="btn btn-primary" id="random-view-btn" onclick="closeRandomAndFocus()">View on Map</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════
+let restaurants = [];
+let selectedId = null;
+let mapInstance = null;
+let markers = [];
+let infoWindow = null;
+let googleMapsLoaded = false;
+let randomPickedId = null;
+
+const MELBOURNE_CENTER = { lat: -37.8136, lng: 144.9631 };
+
+// Persist username
+const usernameEl = document.getElementById('username');
+usernameEl.value = localStorage.getItem('lunchUser') || '';
+usernameEl.addEventListener('change', () => {
+  localStorage.setItem('lunchUser', usernameEl.value.trim());
+});
+
+function getUser() {
+  return usernameEl.value.trim();
+}
+
+// ═══════════════════════════════════════════════
+// Google Maps
+// ═══════════════════════════════════════════════
+let mapLoadTimer = null;
+
+function showMapError(msg) {
+  const el = document.getElementById('mapError');
+  el.textContent = msg;
+  el.style.display = 'block';
+  const btn = document.getElementById('loadMapBtn');
+  btn.textContent = 'Load Map';
+  btn.disabled = false;
+}
+
+document.getElementById('loadMapBtn').addEventListener('click', () => {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) { showMapError('Please paste your API key first.'); return; }
+
+  const btn = document.getElementById('loadMapBtn');
+  btn.textContent = 'Loading…';
+  btn.disabled = true;
+  document.getElementById('mapError').style.display = 'none';
+
+  localStorage.setItem('mapsApiKey', key);
+  loadGoogleMapsScript(key);
+});
+
+// Called by Google if the API key is invalid or billing isn't enabled
+window.gm_authFailure = function () {
+  clearTimeout(mapLoadTimer);
+  showMapError('API key rejected by Google. Check that the Maps JavaScript API is enabled in your Google Cloud Console and billing is set up.');
+};
+
+function loadGoogleMapsScript(key) {
+  clearTimeout(mapLoadTimer);
+
+  // If Maps already loaded, just re-init
+  if (window.google && window.google.maps) {
+    initMap();
+    return;
+  }
+
+  const existing = document.getElementById('gmaps-script');
+  if (existing) existing.remove();
+
+  // Timeout fallback if callback never fires
+  mapLoadTimer = setTimeout(() => {
+    showMapError('Timed out loading Google Maps. Check your API key, ensure the Maps JavaScript API is enabled, and that localhost is not blocked by key restrictions.');
+  }, 10000);
+
+  const script = document.createElement('script');
+  script.id = 'gmaps-script';
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=initMap`;
+  script.async = true;
+  script.onerror = () => {
+    clearTimeout(mapLoadTimer);
+    showMapError('Failed to load the Google Maps script. Check your network connection and API key.');
+  };
+  document.head.appendChild(script);
+}
+
+window.initMap = function () {
+  clearTimeout(mapLoadTimer);
+  googleMapsLoaded = true;
+  document.getElementById('map-setup').classList.add('hidden');
+
+  try {
+    mapInstance = new google.maps.Map(document.getElementById('map'), {
+      center: MELBOURNE_CENTER,
+      zoom: 15,
+      mapTypeControl: false,
+      fullscreenControl: true,
+      streetViewControl: false,
+      styles: [
+        { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+      ]
+    });
+    infoWindow = new google.maps.InfoWindow();
+    renderMarkers();
+    geocodeAllMissing();
+  } catch (err) {
+    showMapError('Map initialisation failed: ' + err.message);
+    document.getElementById('map-setup').classList.remove('hidden');
+  }
+};
+
+function getMarkerColor(r) {
+  return '#e8532a'; // always primary orange to match UI
+}
+
+function makeMarkerSvg(num, color) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 36 44">
+    <path fill="${color}" stroke="white" stroke-width="1.5" d="M18 1C8.6 1 1 8.6 1 18c0 12.5 17 25 17 25S35 30.5 35 18C35 8.6 27.4 1 18 1z"/>
+    <circle fill="white" cx="18" cy="18" r="10"/>
+    <text x="18" y="22.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="${num > 9 ? 10 : 12}" font-weight="bold" fill="${color}">${num}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+async function geocodeAllMissing() {
+  const missing = restaurants.filter(r => r.lat == null || r.lng == null);
+  if (!missing.length) return;
+  showToast(`Locating ${missing.length} restaurant${missing.length > 1 ? 's' : ''} on the map…`);
+  const geocoder = new google.maps.Geocoder();
+  for (const r of missing) {
+    await new Promise(resolve => {
+      const query = r.address.toLowerCase().includes('melbourne') ? r.address : r.address + ', Melbourne VIC, Australia';
+      geocoder.geocode({ address: query }, async (results, status) => {
+        if (status === 'OK' && results[0]) {
+          r.lat = results[0].geometry.location.lat();
+          r.lng = results[0].geometry.location.lng();
+          try {
+            await fetch(`/api/restaurants/${r.id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ lat: r.lat, lng: r.lng })
+            });
+          } catch (_) {}
+          renderMarkers();
+          renderList();
+        }
+        // Geocoding API rate limit — small delay between requests
+        setTimeout(resolve, 200);
+      });
+    });
+  }
+  showToast('All restaurants located!', 'success');
+}
+
+function renderMarkers() {
+  if (!googleMapsLoaded || !mapInstance) return;
+
+  markers.forEach(m => m.setMap(null));
+  markers = [];
+
+  restaurants.forEach((r, i) => {
+    if (r.lat == null || r.lng == null) return;
+
+    const color = getMarkerColor(r);
+    const marker = new google.maps.Marker({
+      position: { lat: r.lat, lng: r.lng },
+      map: mapInstance,
+      title: r.name,
+      icon: {
+        url: makeMarkerSvg(i + 1, color),
+        scaledSize: new google.maps.Size(36, 44),
+        anchor: new google.maps.Point(18, 44)
+      },
+      optimized: false
+    });
+
+    marker.addListener('click', () => {
+      selectRestaurant(r.id, false);
+
+      const avg = r.ratings.length
+        ? (r.ratings.reduce((a, b) => a + b.score, 0) / r.ratings.length).toFixed(1)
+        : null;
+      const stars = avg ? '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg)) : '—';
+
+      infoWindow.setContent(`
+        <div class="iw-content" style="font-family:-apple-system,sans-serif;min-width:200px;">
+          <div class="iw-name" style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:3px;">${r.name}</div>
+          <div class="iw-cuisine" style="font-size:11px;color:#e8532a;font-weight:600;margin-bottom:5px;">${r.cuisine}</div>
+          <div class="iw-address" style="font-size:12px;color:#7a8494;margin-bottom:5px;">📍 ${r.address}</div>
+          ${r.deal ? `<div class="iw-deal" style="font-size:12px;color:#555;margin-bottom:7px;font-style:italic;">🎁 ${r.deal}</div>` : ''}
+          <div class="iw-rating" style="font-size:12px;color:#7a8494;">
+            ${avg ? `<strong style="color:#1a1a2e;">${avg}</strong> ${stars} (${r.ratings.length} rating${r.ratings.length !== 1 ? 's' : ''})` : 'No ratings yet'}
+          </div>
+        </div>
+      `);
+      infoWindow.open(mapInstance, marker);
+    });
+
+    markers.push(marker);
+    marker._restaurantId = r.id;
+  });
+}
+
+function focusOnMap(restaurantId) {
+  if (!googleMapsLoaded || !mapInstance) return;
+  const r = restaurants.find(x => x.id === restaurantId);
+  if (!r || r.lat == null) return;
+  mapInstance.panTo({ lat: r.lat, lng: r.lng });
+  mapInstance.setZoom(17);
+  const marker = markers.find(m => m._restaurantId === restaurantId);
+  if (marker) {
+    google.maps.event.trigger(marker, 'click');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// API calls
+// ═══════════════════════════════════════════════
+async function fetchRestaurants() {
+  const res = await fetch('/api/restaurants');
+  restaurants = await res.json();
+}
+
+async function apiPost(url, body) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error((await res.json()).error || 'Request failed');
+  return res.json();
+}
+
+async function apiDelete(url) {
+  const res = await fetch(url, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Delete failed');
+  return res.json();
+}
+
+// ═══════════════════════════════════════════════
+// Geocoding
+// ═══════════════════════════════════════════════
+async function geocodeAddress(address) {
+  if (!googleMapsLoaded) return null;
+  return new Promise(resolve => {
+    const geocoder = new google.maps.Geocoder();
+    const query = address.toLowerCase().includes('melbourne') ? address : address + ', Melbourne VIC, Australia';
+    geocoder.geocode({ address: query }, (results, status) => {
+      if (status === 'OK' && results[0]) {
+        resolve({
+          lat: results[0].geometry.location.lat(),
+          lng: results[0].geometry.location.lng()
+        });
+      } else {
+        resolve(null);
+      }
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════
+// Rendering
+// ═══════════════════════════════════════════════
+function avgRating(r) {
+  if (!r.ratings.length) return null;
+  return r.ratings.reduce((a, b) => a + b.score, 0) / r.ratings.length;
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function renderList() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const sort = document.getElementById('sort-select').value;
+
+  let list = restaurants.filter(r =>
+    r.name.toLowerCase().includes(q) ||
+    r.cuisine.toLowerCase().includes(q) ||
+    r.address.toLowerCase().includes(q) ||
+    r.deal.toLowerCase().includes(q)
+  );
+
+  if (sort === 'rating') {
+    list = list.sort((a, b) => (avgRating(b) || 0) - (avgRating(a) || 0));
+  } else if (sort === 'name') {
+    list = list.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sort === 'comments') {
+    list = list.sort((a, b) => b.comments.length - a.comments.length);
+  }
+
+  const container = document.getElementById('restaurant-list');
+  if (!list.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">${q ? '🔍' : '🍽️'}</div><p>${q ? 'No results for "' + q + '"' : 'No restaurants yet.<br>Add one to get started!'}</p></div>`;
+    return;
+  }
+
+  // Map displayed index back to original index for numbering
+  container.innerHTML = list.map((r, displayIdx) => {
+    const originalIdx = restaurants.indexOf(r);
+    return renderCard(r, originalIdx + 1, displayIdx);
+  }).join('');
+}
+
+function renderCard(r, num, displayIdx) {
+  const user = getUser();
+  const avg = avgRating(r);
+  const userScore = r.ratings.find(x => x.user === user)?.score || 0;
+
+  const stars = [1,2,3,4,5].map(s =>
+    `<span class="star ${s <= userScore ? 'filled' : ''}" data-id="${r.id}" data-score="${s}">★</span>`
+  ).join('');
+
+  const commentsHtml = r.comments.length
+    ? r.comments.map(c => `
+        <div class="comment">
+          <div class="comment-header">
+            <span class="comment-user">${escHtml(c.user)}</span>
+            <span class="comment-date">${formatDate(c.date)}</span>
+            ${user && c.user === user ? `<button class="comment-delete" data-rid="${r.id}" data-cid="${c.id}" title="Delete comment">✕</button>` : ''}
+          </div>
+          <div class="comment-text">${escHtml(c.text)}</div>
+        </div>`).join('')
+    : '<p class="no-comments">Be the first to comment!</p>';
+
+  // Split deal into label + description if formatted as "Label: description"
+  let dealLabel = '', dealDesc = '';
+  if (r.deal) {
+    const colonIdx = r.deal.indexOf(': ');
+    if (colonIdx > 0 && colonIdx < 40) {
+      dealLabel = r.deal.slice(0, colonIdx);
+      dealDesc = r.deal.slice(colonIdx + 2);
+    } else {
+      dealDesc = r.deal;
+    }
+  }
+
+  return `
+    <div class="card${selectedId === r.id ? ' selected' : ''}" id="card-${r.id}" data-id="${r.id}">
+      <div class="card-main" style="padding:14px 16px 10px;">
+        <div class="card-top" style="margin-bottom:10px;">
+          <div class="card-num">${num}</div>
+          <div class="card-info">
+            <div class="card-name">${escHtml(r.name)}</div>
+            <div class="card-address">📍 ${escHtml(r.address)}</div>
+            ${r.lat == null ? '<span class="no-pin-badge">📌 no map pin yet</span>' : ''}
+          </div>
+          <span class="cuisine-badge">${escHtml(r.cuisine)}</span>
+        </div>
+        ${r.deal ? `
+        <div class="deal-box">
+          ${dealLabel ? `<div class="deal-label">${escHtml(dealLabel)}</div>` : ''}
+          <div class="deal-desc">${escHtml(dealDesc)}</div>
+        </div>` : ''}
+        <div class="rating-row">
+          <div class="stars" data-id="${r.id}">${stars}</div>
+          <span class="avg-rating">
+            ${avg !== null
+              ? `<strong>${avg.toFixed(1)}</strong> / 5 &nbsp;·&nbsp; ${r.ratings.length} vote${r.ratings.length !== 1 ? 's' : ''}`
+              : '<em>No ratings yet</em>'}
+          </span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="comments-toggle" data-id="${r.id}">
+          💬 ${r.comments.length} comment${r.comments.length !== 1 ? 's' : ''}
+          <em class="toggle-arrow">▾</em>
+        </button>
+        <div class="comments-body" id="comments-${r.id}">
+          <div class="comment-list">${commentsHtml}</div>
+          <div class="add-comment">
+            <input id="ci-${r.id}" placeholder="Add a comment…" maxlength="500">
+            <button class="btn-post" data-id="${r.id}">Post</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="delete-btn" data-delete="${r.id}">🗑 Remove</button>
+      </div>
+    </div>`;
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ═══════════════════════════════════════════════
+// Event delegation on list
+// ═══════════════════════════════════════════════
+document.getElementById('restaurant-list').addEventListener('click', async e => {
+  // Star rating
+  const star = e.target.closest('.star');
+  if (star) {
+    e.stopPropagation();
+    const id = star.dataset.id;
+    const score = parseInt(star.dataset.score);
+    await rateRestaurant(id, score);
+    return;
+  }
+
+  // Comment toggle
+  const toggle = e.target.closest('.comments-toggle');
+  if (toggle) {
+    e.stopPropagation();
+    const id = toggle.dataset.id;
+    toggle.classList.toggle('open');
+    document.getElementById(`comments-${id}`).classList.toggle('open');
+    return;
+  }
+
+  // Post comment
+  const postBtn = e.target.closest('.btn-post');
+  if (postBtn) {
+    e.stopPropagation();
+    const id = postBtn.dataset.id;
+    const input = document.getElementById(`ci-${id}`);
+    await postComment(id, input.value);
+    return;
+  }
+
+  // Comment delete
+  const commentDel = e.target.closest('.comment-delete');
+  if (commentDel) {
+    e.stopPropagation();
+    await deleteComment(commentDel.dataset.rid, commentDel.dataset.cid);
+    return;
+  }
+
+  // Restaurant delete
+  const delBtn = e.target.closest('[data-delete]');
+  if (delBtn) {
+    e.stopPropagation();
+    const id = delBtn.dataset.delete;
+    const r = restaurants.find(x => x.id === id);
+    if (r && confirm(`Remove "${r.name}" from the list?`)) {
+      await deleteRestaurant(id);
+    }
+    return;
+  }
+
+  // Card click → focus map
+  const card = e.target.closest('.card');
+  if (card) {
+    selectRestaurant(card.dataset.id);
+  }
+});
+
+// Star hover effects via event delegation
+document.getElementById('restaurant-list').addEventListener('mouseover', e => {
+  const star = e.target.closest('.star');
+  if (!star) return;
+  const starsEl = star.closest('.stars');
+  const hoverScore = parseInt(star.dataset.score);
+  starsEl.querySelectorAll('.star').forEach(s => {
+    const score = parseInt(s.dataset.score);
+    s.classList.toggle('hover', score <= hoverScore);
+  });
+});
+
+document.getElementById('restaurant-list').addEventListener('mouseout', e => {
+  const star = e.target.closest('.star');
+  if (!star) return;
+  star.closest('.stars').querySelectorAll('.star').forEach(s => s.classList.remove('hover'));
+});
+
+// Comment submit on Enter
+document.getElementById('restaurant-list').addEventListener('keydown', async e => {
+  if (e.key === 'Enter') {
+    const input = e.target;
+    if (!input.id.startsWith('ci-')) return;
+    const id = input.id.slice(3);
+    await postComment(id, input.value);
+  }
+});
+
+// ═══════════════════════════════════════════════
+// Actions
+// ═══════════════════════════════════════════════
+function selectRestaurant(id, panMap = true) {
+  selectedId = id;
+  document.querySelectorAll('.card').forEach(c => c.classList.toggle('selected', c.dataset.id === id));
+  const card = document.getElementById(`card-${id}`);
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (panMap) focusOnMap(id);
+}
+
+async function rateRestaurant(id, score) {
+  const user = getUser();
+  if (!user) { showToast('Enter your name at the top before rating!', 'error'); return; }
+  try {
+    const updated = await apiPost(`/api/restaurants/${id}/rate`, { user, score });
+    const idx = restaurants.findIndex(r => r.id === id);
+    restaurants[idx] = updated;
+    renderList();
+    renderMarkers();
+    showToast(`Rated ${score} ★`, 'success');
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+async function postComment(id, text) {
+  const user = getUser();
+  if (!user) { showToast('Enter your name at the top before commenting!', 'error'); return; }
+  if (!text?.trim()) return;
+  try {
+    const updated = await apiPost(`/api/restaurants/${id}/comment`, { user, text: text.trim() });
+    const idx = restaurants.findIndex(r => r.id === id);
+    restaurants[idx] = updated;
+    renderList();
+    // Re-open comments panel
+    const toggle = document.querySelector(`.comments-toggle[data-id="${id}"]`);
+    if (toggle) {
+      toggle.classList.add('open');
+      document.getElementById(`comments-${id}`)?.classList.add('open');
+    }
+    showToast('Comment posted!', 'success');
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+async function deleteComment(rid, cid) {
+  try {
+    const updated = await apiDelete(`/api/restaurants/${rid}/comments/${cid}`);
+    const idx = restaurants.findIndex(r => r.id === rid);
+    restaurants[idx] = updated;
+    renderList();
+    const toggle = document.querySelector(`.comments-toggle[data-id="${rid}"]`);
+    if (toggle) {
+      toggle.classList.add('open');
+      document.getElementById(`comments-${rid}`)?.classList.add('open');
+    }
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+async function deleteRestaurant(id) {
+  try {
+    await apiDelete(`/api/restaurants/${id}`);
+    restaurants = restaurants.filter(r => r.id !== id);
+    if (selectedId === id) selectedId = null;
+    renderList();
+    renderMarkers();
+    showToast('Restaurant removed.', 'success');
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// Add Restaurant Modal
+// ═══════════════════════════════════════════════
+document.getElementById('addBtn').addEventListener('click', openModal);
+
+function openModal() {
+  document.getElementById('addModal').classList.add('open');
+  document.getElementById('f-name').focus();
+}
+
+function closeModal() {
+  document.getElementById('addModal').classList.remove('open');
+  ['f-name','f-address','f-deal'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-cuisine').value = 'Other';
+  document.getElementById('geocodeHint').textContent = 'Address will be automatically located on the map.';
+  document.getElementById('geocodeHint').className = 'geocode-hint';
+}
+
+document.getElementById('addModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('addModal')) closeModal();
+});
+
+async function saveRestaurant() {
+  const name = document.getElementById('f-name').value.trim();
+  const address = document.getElementById('f-address').value.trim();
+  const deal = document.getElementById('f-deal').value.trim();
+  const cuisine = document.getElementById('f-cuisine').value;
+
+  if (!name) { document.getElementById('f-name').focus(); return; }
+  if (!address) { document.getElementById('f-address').focus(); return; }
+
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.textContent = 'Adding…';
+  saveBtn.disabled = true;
+
+  let lat = null, lng = null;
+  const hint = document.getElementById('geocodeHint');
+
+  if (googleMapsLoaded) {
+    hint.textContent = 'Locating on map…';
+    hint.className = 'geocode-hint loading';
+    const coords = await geocodeAddress(address);
+    if (coords) {
+      lat = coords.lat;
+      lng = coords.lng;
+      hint.textContent = '✓ Location found!';
+      hint.className = 'geocode-hint success';
+    } else {
+      hint.textContent = 'Could not locate address — restaurant added without map pin.';
+      hint.className = 'geocode-hint error';
+    }
+  }
+
+  try {
+    const r = await apiPost('/api/restaurants', { name, address, deal, cuisine, lat, lng });
+    restaurants.push(r);
+    renderList();
+    renderMarkers();
+    closeModal();
+    showToast(`"${r.name}" added!`, 'success');
+    if (r.lat) setTimeout(() => selectRestaurant(r.id), 300);
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    saveBtn.textContent = 'Add Restaurant';
+    saveBtn.disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// Random picker
+// ═══════════════════════════════════════════════
+document.getElementById('randomBtn').addEventListener('click', () => {
+  if (!restaurants.length) { showToast('No restaurants to pick from!', 'error'); return; }
+
+  const overlay = document.getElementById('random-overlay');
+  overlay.classList.add('active');
+
+  const nameEl = document.getElementById('random-name');
+  const cuisineEl = document.getElementById('random-cuisine');
+  const dealEl = document.getElementById('random-deal');
+
+  let ticks = 0;
+  const maxTicks = 20 + Math.floor(Math.random() * 15);
+  let delay = 60;
+
+  function tick() {
+    const r = restaurants[Math.floor(Math.random() * restaurants.length)];
+    nameEl.textContent = r.name;
+    cuisineEl.textContent = r.cuisine;
+    dealEl.textContent = r.deal || '';
+    ticks++;
+
+    if (ticks < maxTicks) {
+      delay = Math.min(delay * 1.08, 400);
+      setTimeout(tick, delay);
+    } else {
+      // Final pick
+      randomPickedId = r.id;
+    }
+  }
+
+  tick();
+});
+
+function closeRandom() {
+  document.getElementById('random-overlay').classList.remove('active');
+  randomPickedId = null;
+}
+
+function closeRandomAndFocus() {
+  const id = randomPickedId;
+  closeRandom();
+  if (id) setTimeout(() => selectRestaurant(id), 150);
+}
+
+document.getElementById('random-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('random-overlay')) closeRandom();
+});
+
+// ═══════════════════════════════════════════════
+// API key button (re-open setup)
+// ═══════════════════════════════════════════════
+document.getElementById('apiKeyBtn').addEventListener('click', () => {
+  const setup = document.getElementById('map-setup');
+  const key = localStorage.getItem('mapsApiKey') || '';
+  document.getElementById('apiKeyInput').value = key;
+  setup.classList.remove('hidden');
+});
+
+// ═══════════════════════════════════════════════
+// Search & sort
+// ═══════════════════════════════════════════════
+document.getElementById('search').addEventListener('input', renderList);
+document.getElementById('sort-select').addEventListener('change', renderList);
+
+// ═══════════════════════════════════════════════
+// Toast
+// ═══════════════════════════════════════════════
+function showToast(msg, type = '') {
+  const el = document.createElement('div');
+  el.className = `toast${type ? ' ' + type : ''}`;
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+// ═══════════════════════════════════════════════
+// Init
+// ═══════════════════════════════════════════════
+(async () => {
+  await fetchRestaurants();
+  renderList();
+
+  const savedKey = localStorage.getItem('mapsApiKey');
+  if (savedKey) {
+    document.getElementById('apiKeyInput').value = savedKey;
+    loadGoogleMapsScript(savedKey);
+  }
+})();
+</script>
+</body>
+</html>

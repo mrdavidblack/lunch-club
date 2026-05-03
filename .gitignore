@@ -1,0 +1,5 @@
+node_modules/
+
+# Restaurant data lives on the server's persistent volume.
+# The app auto-seeds this file on first run if it's missing.
+data/restaurants.json
