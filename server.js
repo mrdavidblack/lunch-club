@@ -265,6 +265,14 @@ function writeData(data) {
 }
 
 app.use(express.json());
+
+// Serve index.html with the Maps API key injected server-side
+app.get('/', (_req, res) => {
+  let html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+  html = html.replace('__MAPS_API_KEY__', process.env.GOOGLE_MAPS_API_KEY || '');
+  res.send(html);
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/restaurants', (_req, res) => {

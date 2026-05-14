@@ -653,6 +653,7 @@
     #restaurant-list::-webkit-scrollbar-track { background: transparent; }
     #restaurant-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
   </style>
+  <script>window.MAPS_API_KEY = '__MAPS_API_KEY__';</script>
 </head>
 <body>
 
@@ -675,7 +676,6 @@
 
   <button class="btn btn-ghost" id="randomBtn">🎲 Pick Random</button>
   <button class="btn btn-primary" id="addBtn">+ Add Restaurant</button>
-  <button class="btn btn-ghost" id="apiKeyBtn" title="Configure Google Maps API key" style="padding:0 10px;">🗺️</button>
 </header>
 
 <!-- Main -->
@@ -1457,15 +1457,6 @@ document.getElementById('random-overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('random-overlay')) closeRandom();
 });
 
-// ═══════════════════════════════════════════════
-// API key button (re-open setup)
-// ═══════════════════════════════════════════════
-document.getElementById('apiKeyBtn').addEventListener('click', () => {
-  const setup = document.getElementById('map-setup');
-  const key = localStorage.getItem('mapsApiKey') || '';
-  document.getElementById('apiKeyInput').value = key;
-  setup.classList.remove('hidden');
-});
 
 // ═══════════════════════════════════════════════
 // Search & sort
@@ -1491,10 +1482,14 @@ function showToast(msg, type = '') {
   await fetchRestaurants();
   renderList();
 
-  const savedKey = localStorage.getItem('mapsApiKey');
-  if (savedKey) {
-    document.getElementById('apiKeyInput').value = savedKey;
-    loadGoogleMapsScript(savedKey);
+  // Use server-injected key, fall back to any locally saved key
+  const key = (window.MAPS_API_KEY && window.MAPS_API_KEY !== '__MAPS_API_KEY__')
+    ? window.MAPS_API_KEY
+    : localStorage.getItem('mapsApiKey');
+
+  if (key) {
+    document.getElementById('apiKeyInput').value = key;
+    loadGoogleMapsScript(key);
   }
 })();
 </script>
