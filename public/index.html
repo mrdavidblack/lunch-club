@@ -702,7 +702,7 @@
   <!-- Right: Map -->
   <div id="right-panel">
     <div id="map"></div>
-    <div id="map-setup">
+    <div id="map-setup" class="hidden">
       <div class="map-setup-box">
         <div class="setup-icon">🗺️</div>
         <h2>Connect Google Maps</h2>
@@ -1490,6 +1490,8 @@ function showToast(msg, type = '') {
   if (key) {
     document.getElementById('apiKeyInput').value = key;
     loadGoogleMapsScript(key);
+  } else {
+    document.getElementById('map-setup').classList.remove('hidden');
   }
 })();
 </script>
